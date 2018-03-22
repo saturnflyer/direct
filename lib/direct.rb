@@ -17,6 +17,8 @@ module Direct
   #   puts "it failed!"
   # }.do_it
   # 
+  # Your blocks will always receive the object itself as the first argument.
+  #
   def direct(key, &block)
     __direct_store(key, block)
     self

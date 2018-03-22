@@ -21,12 +21,14 @@ end
 
 # Somewhere else
 
-SomeClass.new.direct(:success){|*data|
+SomeClass.new.direct(:success){|something, *data|
   STDOUT.puts data
-}.direct(:failure){|*errors|
+}.direct(:failure){|something, *errors|
   STDERR.puts errors
 }.save
 ```
+
+Your blocks will always receive the object itself as the first argument.
 
 ## Why?
 
@@ -63,7 +65,7 @@ if something.save!
   puts "yay! #{something}"
 elsif something.valid? && !something.persisted?
   puts "it sort of worked"
-elseif !something.valid? || something.need_some_other_thing_set?
+elsif !something.valid? || something.need_some_other_thing_set?
   puts "an alternative to it not working"
 else
   puts "boo! #{something}: #{something.errors}"
@@ -77,13 +79,13 @@ Instead, we can name these scenarios and allow the object to handle them; we
 merely provide the block of code to execute:
 
 ```ruby
-Something.new.direct(:success){|the_object|
-  puts "yay! #{the_object}"
-}.direct(:failure){ |the_object, errors|
-  puts "boo! #{the_object}: #{errors}"
-}.direct(:other_scenario){|the_object|
-  puts "here's what happened and what to do..."
-}
+Something.new.direct(:success){ |obj|
+    puts "yay! #{obj}"
+  }.direct(:failure){ |obj, errors|
+    puts "boo! #{obj}: #{errors}"
+  }.direct(:other_scenario){ |obj|
+    puts "here's what happened and what to do..."
+  }
 ```
 
 _Inside_ of the object is where we can handle these named scenarios. If the
