@@ -12,7 +12,7 @@ rvm:
   - jruby-head
 env:
   global:
-    - CC_TEST_REPORTER_ID=bfe1016ce73a5f86938dc5e44163cc4afd64b689cced1aa04d66d4459c7e4b69
+    - CC_TEST_REPORTER_ID=3c4cb48bcc4e29bb3292e99b7736c6dd7c13d0f6a908785e164d03666f5070cc
 matrix:
   allow_failures:
     - rvm: ruby-head
