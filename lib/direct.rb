@@ -1,11 +1,23 @@
 require "direct/version"
-require "concurrent"
 require "direct/executable"
 require "direct/group"
 
 # Include this module in your classes to provide a way for
 # your objects to handle named scenarios with blocks of code.
 module Direct
+  # Wrap a block of code to return an object for handling
+  # success or failure.
+  #
+  # Example:
+  #
+  #   def do_it
+  #     Direct.defer{
+  #       [true, false].sample
+  #     }
+  #   end
+  #   do_it.succes{|result| puts "it worked!" }
+  #     .failure{|result| puts "it failed!" }
+  #
   def self.defer(&block)
     Executable.new(self, &block)
   end

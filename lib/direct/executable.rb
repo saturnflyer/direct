@@ -2,18 +2,18 @@ module Direct
   class Executable
     def initialize(&block)
       @execution = block
-      @success_block = @failure_block = proc{}
-      @exception_modules = [StandardError]
+      @success = @failure = proc{}
+      @exception_classes = [StandardError]
     end
-    attr_reader :execution
+    attr_reader :execution, :exception_classes
 
     def success(&block)
-      @success_block = block
+      @success = block
       self
     end
 
     def failure(&block)
-      @failure_block = block
+      @failure = block
       self
     end
 
@@ -26,17 +26,17 @@ module Direct
     end
 
     def exception_block
-      @exception_block || @failure_block
+      @exception_block || @failure
     end
 
     def value
-      result = execution.call
+      result = execution.()
       if result
-        @success_block.(result)
+        @success.(result)
       else
-        @failure_block.(result)
+        @failure.(result)
       end
-    rescue *@exception_classes => e
+    rescue *exception_classes => e
       exception_block.(e)
     end
     alias execute value
