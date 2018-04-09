@@ -19,7 +19,7 @@ module Direct
   #     .failure{|result| puts "it failed!" }
   #
   def self.defer(&block)
-    Executable.new(self, &block)
+    Executable.new(&block)
   end
 
   # Tell the object what to do in a given scenario.
