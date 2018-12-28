@@ -1,6 +1,6 @@
 require 'simplecov'
-SimpleCov.start
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
-require "direct"
-
+SimpleCov.start do
+  add_filter 'test'
+end
 require "minitest/autorun"
+require "direct"

@@ -15,7 +15,7 @@ module Direct
   #       [true, false].sample
   #     }
   #   end
-  #   do_it.succes{|result| puts "it worked!" }
+  #   do_it.success{|result| puts "it worked!" }
   #     .failure{|result| puts "it failed!" }
   #
   def self.defer(&block)
