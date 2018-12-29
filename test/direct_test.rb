@@ -35,4 +35,26 @@ class DirectTest < Minitest::Test
   def test_that_it_runs_failure_path
     assert_equal("it failed! oops!", do_it(save: false))
   end
+
+  def test_that_it_runs_multiple_blocks
+    @results = []
+    Something.new.
+      direct(:failure){|_| @results << "nope" }.
+      direct(:success){|_| @results << "first" }.
+      direct(:success){|_| @results << "second" }.
+      save!
+
+    assert_equal ["first", "second"], @results
+  end
+
+  def test_that_it_runs_multiple_alternate_blocks
+    @results = []
+    Something.new(save: false).
+      direct(:success){|_| @results << "nope" }.
+      direct(:failure){|_| @results << "first" }.
+      direct(:failure){|_| @results << "second" }.
+      save!
+
+    assert_equal ["first", "second"], @results
+  end
 end

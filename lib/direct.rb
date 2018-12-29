@@ -15,8 +15,9 @@ module Direct
   #       [true, false].sample
   #     }
   #   end
-  #   do_it.success{|result| puts "it worked!" }
-  #     .failure{|result| puts "it failed!" }
+  #   do_it.
+  #     success{|result| puts "it worked!" }.
+  #     failure{|result| puts "it failed!" }
   #
   def self.defer(&block)
     Executable.new(&block)
