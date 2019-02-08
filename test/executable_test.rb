@@ -1,5 +1,4 @@
 require "test_helper"
-require "pry-byebug"
 
 class Later
   include Direct
