@@ -5,6 +5,8 @@ require "direct/group"
 # Include this module in your classes to provide a way for
 # your objects to handle named scenarios with blocks of code.
 module Direct
+  class MissingProcedure < StandardError; end
+
   # Wrap a block of code to return an object for handling
   # success or failure.
   #
@@ -58,6 +60,8 @@ module Direct
     __directions.fetch(key).map do |block|
       block.call(self, *args)
     end
+  rescue KeyError
+    raise MissingProcedure, "Procedure for :#{key} was reached but not specified."
   end
 
   private
