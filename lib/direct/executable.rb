@@ -1,19 +1,20 @@
 module Direct
   class Executable
-    def initialize(&block)
-      @execution = block
-      @success = @failure = proc{}
+    include Direct
+
+    def initialize(callable=nil, &block)
+      @execution = callable || block
       @exception_classes = [StandardError]
     end
     attr_reader :execution, :exception_classes
 
-    def success(&block)
-      @success = block
+    def success(callable=nil, &block)
+      direct(:success, (callable || block))
       self
     end
 
-    def failure(&block)
-      @failure = block
+    def failure(callable=nil, &block)
+      direct(:failure, (callable || block))
       self
     end
 
@@ -21,23 +22,28 @@ module Direct
       unless classes.empty?
         @exception_classes = classes
       end
-      @exception_block = block
+      direct(:exception, block)
       self
     end
 
-    def exception_block
-      @exception_block || @failure
+    def run_exception_block
+      if __directions.key?(:exception)
+        as_directed(:exception)
+      else
+        as_directed(:failure)
+      end
     end
+    private :run_exception_block
 
     def value
       result = execution.()
       if result
-        @success.(result)
+        as_directed(:success, result)
       else
-        @failure.(result)
+        as_directed(:failure, result)
       end
-    rescue *exception_classes => e
-      exception_block.(e)
+    rescue *exception_classes
+      run_exception_block
     end
     alias execute value
   end

@@ -38,8 +38,8 @@ module Direct
   #
   # Your blocks will always receive the object itself as the first argument.
   #
-  def direct(key, &block)
-    __directions.store(key, &block)
+  def direct(key, callable=nil, &block)
+    __directions.store(key, callable || block)
     self
   end
   alias_method :when, :direct
@@ -55,7 +55,7 @@ module Direct
   #
   # This will raise an error if the provided key is not found
   def as_directed(key, *args)
-    __directions.fetch(key).each do |block|
+    __directions.fetch(key).map do |block|
       block.call(self, *args)
     end
   end

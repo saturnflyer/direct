@@ -10,13 +10,17 @@ module Direct
     attr_reader :map
     private :map
 
-    def store(key, &block)
-      map[key] << block
+    def store(key, callable=nil, &block)
+      map[key] << (callable || block)
       self
     end
 
     def fetch(key)
       map.fetch(key)
+    end
+
+    def key?(key)
+      map.key?(key)
     end
   end
 end
