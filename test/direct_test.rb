@@ -40,6 +40,13 @@ class DirectTest < Minitest::Test
     assert_equal("it failed! oops!", do_it(save: false))
   end
 
+  def test_that_it_passes_the_object_to_the_path
+    object = Something.new.direct(:success){|passed_object|
+      passed_object
+    }
+    assert_equal [object], object.save!
+  end
+
   def test_that_it_runs_multiple_blocks
     @results = []
     Something.new.
