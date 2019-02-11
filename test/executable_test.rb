@@ -47,4 +47,12 @@ class ExecutableTest < Minitest::Test
     deferred.direct(:alternate){ "the alternate works!" }
     assert_equal(["the alternate works!"], deferred.as_directed(:alternate))
   end
+
+  def test_that_it_passes_exception_object_to_exception_block
+    deferred = Later.new.
+      perform(->{ raise StandardError, "oopsie!" }).
+      exception{|obj, exception| exception.message }
+
+    assert_equal(["oopsie!"], deferred.value)
+  end
 end
