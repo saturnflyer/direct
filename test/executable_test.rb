@@ -41,4 +41,10 @@ class ExecutableTest < Minitest::Test
 
       assert_equal(["failure block as expected!"], deferred.value)
   end
+
+  def test_that_it_allows_additional_keys
+    deferred = Later.new.perform(->{ "it works!" })
+    deferred.direct(:alternate){ "the alternate works!" }
+    assert_equal(["the alternate works!"], deferred.as_directed(:alternate))
+  end
 end
