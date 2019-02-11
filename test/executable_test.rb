@@ -32,4 +32,13 @@ class ExecutableTest < Minitest::Test
   def test_that_it_runs_exception_path
     assert_equal(["oops! no method!"], perform { Object.no_method })
   end
+
+  def test_that_it_runs_failure_with_no_exception_block
+    deferred = Later.new.
+      perform(->{ raise StandardError }).
+      success{ "this should not happen" }.
+      failure{ "failure block as expected!" }
+
+      assert_equal(["failure block as expected!"], deferred.value)
+  end
 end

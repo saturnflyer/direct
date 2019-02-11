@@ -15,6 +15,10 @@ class Something
       as_directed(:failure, "oops!")
     end
   end
+
+  def unknown
+    as_directed(:missing_procedure)
+  end
 end
 
 
@@ -56,5 +60,12 @@ class DirectTest < Minitest::Test
       save!
 
     assert_equal ["first", "second"], @results
+  end
+
+  def  test_that_it_raises_error_for_unknown_direction
+    err = assert_raises(Direct::MissingProcedure) do
+      Something.new.unknown
+    end
+    assert_match(/Procedure for :missing_procedure was reached but not specified./, err.message)
   end
 end
