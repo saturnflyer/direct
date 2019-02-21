@@ -21,6 +21,14 @@ class Something
   end
 end
 
+class PassThrough
+  include Direct.allow_missing_directions
+  def save
+    as_directed(:success)
+    "it worked!"
+  end
+end
+
 
 class DirectTest < Minitest::Test
   def do_it(save: true)
@@ -74,5 +82,9 @@ class DirectTest < Minitest::Test
       Something.new.unknown
     end
     assert_match(/Procedure for :missing_procedure was reached but not specified./, err.message)
+  end
+
+  def test_that_it_allows_no_directions
+    assert_equal PassThrough.new.save, "it worked!"
   end
 end

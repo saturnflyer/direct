@@ -7,6 +7,32 @@ require "direct/group"
 module Direct
   class MissingProcedure < StandardError; end
 
+  module AllowMissing
+    include Direct
+    def allow_missing_directions?
+      true
+    end
+  end
+
+  # Use this module to allow your procedures to go ignored.
+  #
+  # Example:
+  #
+  #   class Thing < ActiveRecord::Base
+  #     include Direct.allow_missing_directions
+  #
+  #     def save(*)
+  #       super
+  #       as_directed(:success)
+  #     end
+  #   end
+  #
+  #   Thing.new.save # => no MissingProcedure error raised.
+  #
+  def self.allow_missing_directions
+    AllowMissing
+  end
+
   # Wrap a block of code to return an object for handling
   # success or failure.
   #
@@ -57,6 +83,7 @@ module Direct
   #
   # This will raise an error if the provided key is not found
   def as_directed(key, *args)
+    return if allow_missing_directions? && __directions.empty?
     __directions.fetch(key).map do |block|
       block.call(self, *args)
     end
@@ -65,6 +92,10 @@ module Direct
   end
 
   private
+
+  def allow_missing_directions?
+    false
+  end
 
   def __directions
     @__directions ||= Direct::Group.new

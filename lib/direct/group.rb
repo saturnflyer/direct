@@ -22,5 +22,13 @@ module Direct
     def key?(key)
       map.key?(key)
     end
+
+    def empty?
+      map.empty?
+    end
+
+    def inspect
+      map.keys.inspect
+    end
   end
 end
