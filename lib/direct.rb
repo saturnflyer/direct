@@ -88,6 +88,7 @@ module Direct
       block.call(self, *args)
     end
   rescue KeyError
+    return if allow_missing_directions?
     raise MissingProcedure, "Procedure for :#{key} was reached but not specified."
   end
 

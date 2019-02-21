@@ -27,6 +27,11 @@ class PassThrough
     as_directed(:success)
     "it worked!"
   end
+
+  def other
+    as_directed(:specialized)
+    as_directed(:other)
+  end
 end
 
 
@@ -85,6 +90,11 @@ class DirectTest < Minitest::Test
   end
 
   def test_that_it_allows_no_directions
-    assert_equal PassThrough.new.save, "it worked!"
+    assert_equal "it worked!", PassThrough.new.save
+  end
+
+  def test_that_it_executes_provided_directions
+    object = PassThrough.new.direct(:other){ "it worked!" }
+    assert_equal ["it worked!"], object.other
   end
 end
