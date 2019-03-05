@@ -1,7 +1,4 @@
 require "direct/version"
-require "direct/executable"
-require "direct/group"
-
 # Include this module in your classes to provide a way for
 # your objects to handle named scenarios with blocks of code.
 module Direct
@@ -32,6 +29,33 @@ module Direct
   def self.allow_missing_directions
     AllowMissing
   end
+end
+
+require "direct/executable"
+require "direct/strict_executable"
+require "direct/group"
+
+module Direct
+
+  # Wrap a block of code to return an object for handling
+  # success or failure. Raises exceptions when directions
+  # are not provided
+  #
+  # Example:
+  #
+  #   def do_it
+  #     Direct.strict_defer{
+  #       [true, false].sample
+  #     }
+  #   end
+  #   do_it.
+  #     success{|result| puts "it worked!" }.
+  #     failure{|result| puts "it failed!" }.
+  #     value
+  #
+  def self.strict_defer(&block)
+    StrictExecutable.new(&block)
+  end
 
   # Wrap a block of code to return an object for handling
   # success or failure.
@@ -43,9 +67,7 @@ module Direct
   #       [true, false].sample
   #     }
   #   end
-  #   do_it.
-  #     success{|result| puts "it worked!" }.
-  #     failure{|result| puts "it failed!" }
+  #   do_it.value
   #
   def self.defer(&block)
     Executable.new(&block)

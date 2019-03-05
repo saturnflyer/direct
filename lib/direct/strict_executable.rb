@@ -1,8 +1,8 @@
 module Direct
-  class Executable
-    include Direct.allow_missing_directions
+  class StrictExecutable
+    include Direct
 
-    # It is intended that you initialize objects via Direct.defer
+    # It is intended that you initialize objects via Direct.strict_defer
     # and not directly initializing this class.
     #
     # You may initialize this class and provide an object which
@@ -10,11 +10,11 @@ module Direct
     #
     # Example:
     #
-    #   Direct.defer do
+    #   Direct.strict_defer do
     #     puts "see ya later!"
     #   end
     #
-    #   Direct.defer(->{ "call me, maybe" })
+    #   Direct.strict_defer(->{ "call me, maybe" })
     #
     def initialize(callable=nil, &block)
       @execution = callable || block
@@ -49,7 +49,7 @@ module Direct
     #
     # Example:
     #
-    #   Direct.defer {
+    #   Direct.strict_defer {
     #      # something...
     #   }.exception(NoMethodError) { |deferred, exception|
     #      ExceptionNotifier.notify(exception)

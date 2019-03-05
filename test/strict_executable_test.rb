@@ -1,10 +1,8 @@
 require "test_helper"
 
 class Later
-  include Direct
-
   def perform(callable)
-    Direct.defer {
+    Direct.strict_defer {
       callable.()
     }
   end
@@ -15,6 +13,8 @@ class ExecutableTest < Minitest::Test
   def perform(&block)
     Later.new.
       perform(block).
+      success{ "succeeded!" }.
+      failure{ "failed!" }.
       exception(NoMethodError){ "oops! no method!" }.
       value
   end
