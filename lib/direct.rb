@@ -36,7 +36,6 @@ require "direct/strict_executable"
 require "direct/group"
 
 module Direct
-
   # Wrap a block of code to return an object for handling
   # success or failure. Raises exceptions when directions
   # are not provided
