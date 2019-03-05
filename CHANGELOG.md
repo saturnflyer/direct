@@ -1,3 +1,7 @@
+## Version 1.2.0
+
+Provide a Direct.defer and Direct.strict_defer to allow deferring blocks without success and failure procedures.
+
 ## Version 1.1.1
 
 Include Direct.allow_missing_directions to allow as_directed to be ignored when missing.
