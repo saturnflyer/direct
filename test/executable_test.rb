@@ -94,7 +94,7 @@ class ExecutableTestWithBlocks < Minitest::Test
   def test_that_it_passes_exception_object_to_exception_block
     deferred = NotNow.new.
       perform(->{ raise StandardError, "oopsie!" }).
-      exception{|obj, exception| exception.message }
+      exception{|obj, object, exception| exception.message }
 
     assert_equal(["oopsie!"], deferred.value)
   end

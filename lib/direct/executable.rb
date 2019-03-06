@@ -16,11 +16,12 @@ module Direct
     #
     #   Direct.defer(->{ "call me, maybe" })
     #
-    def initialize(callable=nil, &block)
+    def initialize(callable=nil, object: nil, &block)
+      @object = object
       @execution = callable || block
       @exception_classes = [StandardError]
     end
-    attr_reader :execution, :exception_classes
+    attr_reader :execution, :exception_classes, :object
 
     # Tell the object what to do for a success path
     #
@@ -65,9 +66,9 @@ module Direct
 
     def run_exception_block(exception)
       if __directions.key?(:exception)
-        as_directed(:exception, exception)
+        as_directed(:exception, object, exception)
       else
-        as_directed(:failure, exception)
+        as_directed(:failure, object, exception)
       end
     end
     private :run_exception_block
@@ -79,9 +80,9 @@ module Direct
     def value
       result = execution.()
       if result
-        as_directed(:success, result)
+        as_directed(:success, object, result)
       else
-        as_directed(:failure, result)
+        as_directed(:failure, object, result)
       end
     rescue *exception_classes => exception
       run_exception_block(exception)

@@ -68,8 +68,8 @@ module Direct
   #   end
   #   do_it.value
   #
-  def self.defer(&block)
-    Executable.new(&block)
+  def self.defer(*args, object: nil, &block)
+    Executable.new(*args, object: object, &block)
   end
 
   # Tell the object what to do in a given scenario.
