@@ -16,6 +16,30 @@ module Direct
     #
     #   Direct.defer(->{ "call me, maybe" })
     #
+    # You may also provide an 'object:' parameter which will be
+    # passed to the provided blocks when they are ultimately executed
+    #
+    # Example:
+    #
+    #   Direct.defer(object: self) do
+    #     # do work here
+    #   end.success {|deferred, deferred_block_result, object|
+    #     # you have access to the provided object here
+    #   }
+    #
+    # The object is a useful reference because the Executable instance
+    # is the deferred object, instead of the object using Direct.defer
+    #
+    #   class Thing
+    #     def do_something
+    #       Direct.defer(object: self){ do_the_work }
+    #     end
+    #   end
+    #
+    #   Thing.new.do_something.success {|deferred, result, thing|
+    #      puts "The #{thing} did something!"
+    #   }.execute
+    #
     def initialize(callable=nil, object: nil, &block)
       @object = object
       @execution = callable || block
@@ -52,7 +76,7 @@ module Direct
     #
     #   Direct.defer {
     #      # something...
-    #   }.exception(NoMethodError) { |deferred, exception|
+    #   }.exception(NoMethodError) { |deferred, exception, object|
     #      ExceptionNotifier.notify(exception)
     #   }
     #
@@ -66,9 +90,9 @@ module Direct
 
     def run_exception_block(exception)
       if __directions.key?(:exception)
-        as_directed(:exception, object, exception)
+        as_directed(:exception, exception, object)
       else
-        as_directed(:failure, object, exception)
+        as_directed(:failure, exception, object)
       end
     end
     private :run_exception_block
@@ -80,9 +104,9 @@ module Direct
     def value
       result = execution.()
       if result
-        as_directed(:success, object, result)
+        as_directed(:success, result, object)
       else
-        as_directed(:failure, object, result)
+        as_directed(:failure, result, object)
       end
     rescue *exception_classes => exception
       run_exception_block(exception)

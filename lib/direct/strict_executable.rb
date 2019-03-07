@@ -16,11 +16,38 @@ module Direct
     #
     #   Direct.strict_defer(->{ "call me, maybe" })
     #
-    def initialize(callable=nil, &block)
+    # You may also provide an 'object:' parameter which will be
+    # passed to the provided blocks when they are ultimately executed
+    #
+    # Example:
+    #
+    #   Direct.strict_defer(object: self) do
+    #     # do work here
+    #   end.success {|deferred, deferred_block_result, object|
+    #     # you have access to the provided object here
+    #   }
+    #
+    # The object is a useful reference because the Executable instance
+    # is the deferred object, instead of the object using Direct.strict_defer
+    #
+    #   class Thing
+    #     def do_something
+    #       Direct.strict_defer(object: self){ do_the_work }
+    #     end
+    #   end
+    #
+    #   Thing.new.do_something.success {|deferred, result, thing|
+    #      puts "The #{thing} did something!"
+    #   }.failure{|_,_,thing|
+    #      puts "#{thing} failed!"
+    #   }.execute
+    #
+    def initialize(callable=nil, object: nil, &block)
+      @object = object
       @execution = callable || block
       @exception_classes = [StandardError]
     end
-    attr_reader :execution, :exception_classes
+    attr_reader :execution, :exception_classes, :object
 
     # Tell the object what to do for a success path
     #
@@ -51,7 +78,7 @@ module Direct
     #
     #   Direct.strict_defer {
     #      # something...
-    #   }.exception(NoMethodError) { |deferred, exception|
+    #   }.exception(NoMethodError) { |deferred, exception, object|
     #      ExceptionNotifier.notify(exception)
     #   }
     #
@@ -65,9 +92,9 @@ module Direct
 
     def run_exception_block(exception)
       if __directions.key?(:exception)
-        as_directed(:exception, exception)
+        as_directed(:exception, exception, object)
       else
-        as_directed(:failure, exception)
+        as_directed(:failure, exception, object)
       end
     end
     private :run_exception_block
