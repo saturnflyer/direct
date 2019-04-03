@@ -8,7 +8,53 @@ outside of your objects and just tell them what to do.
 ## Usage
 
 ```ruby
+require 'direct'
 class SomeClass
+  def procedure
+    Direct.defer(object: self){
+      # return a truthy or falsey object
+      # to execute success or failure blocks
+    }
+  end
+end
+
+SomeClass.new.procedure.success{ |deferred_object, result, object|
+  puts "it worked!"
+}.failure { |deferred_object, result, object|
+  puts "it failed :-("
+}.execute
+```
+
+If the example `procedure` method above raises an exception instead of just returning a falsey object, the `failure` block will be run.
+
+But you can specify what to do when an exception is raised instead:
+
+```ruby
+SomeClass.new.procedure.success{ |deferred_object, result, object|
+  puts "it worked!"
+}.failure { |deferred_object, result, object|
+  puts "it failed :-("
+}.exception{ |deferred_object, exception, object|
+  puts "Oh no! An exception was raised!"
+}.execute
+```
+
+By default it will handle `StandardError` execeptions but you can be more specific if you like:
+
+```ruby
+SomeClass.new.procedure.success{ |deferred_object, result, object|
+  puts "it worked!"
+}.failure { |deferred_object, result, object|
+  puts "it failed :-("
+}.exception(SomeLibrary::SomeSpecialError){ |deferred_object, exception, object|
+  puts "Oh no! An exception was raised!"
+}.execute
+```
+
+The `defer` method uses built-in classes but you can build your own to manage executing named blocks
+
+```ruby
+class DeferrableClass
   include Direct
 
   def save
@@ -19,11 +65,9 @@ class SomeClass
   end
 end
 
-# Somewhere else
-
-SomeClass.new.direct(:success){|something, *data|
+DeferrableClass.new.direct(:success){|instance, *data|
   STDOUT.puts data
-}.direct(:failure){|something, *errors|
+}.direct(:failure){|instance, *errors|
   STDERR.puts errors
 }.save
 ```
