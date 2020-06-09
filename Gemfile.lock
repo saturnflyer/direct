@@ -1,0 +1,39 @@
+PATH
+  remote: .
+  specs:
+    direct (2.0.0)
+      concurrent-ruby (>= 1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    byebug (11.1.3)
+    coderay (1.1.3)
+    concurrent-ruby (1.1.6)
+    docile (1.3.2)
+    method_source (1.0.0)
+    minitest (5.14.1)
+    pry (0.13.1)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    pry-byebug (3.9.0)
+      byebug (~> 11.0)
+      pry (~> 0.13.0)
+    rake (13.0.1)
+    simplecov (0.18.5)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+    simplecov-html (0.12.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  direct!
+  minitest (~> 5.11)
+  pry-byebug
+  rake (~> 13.0)
+  simplecov
+
+BUNDLED WITH
+   2.1.4
