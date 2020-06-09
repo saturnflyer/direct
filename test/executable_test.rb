@@ -18,11 +18,11 @@ class ExecutableTest < Minitest::Test
   end
 
   def test_that_it_runs_success_path
-    assert_equal(["succeeded!"], perform { true })
+    assert perform { true }
   end
 
   def test_that_it_runs_failure_path
-    assert_equal(["failed!"], perform { false })
+    refute perform { false }
   end
 
   def test_that_it_runs_exception_path

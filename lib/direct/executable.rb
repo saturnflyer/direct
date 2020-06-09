@@ -104,9 +104,9 @@ module Direct
     def value
       result = execution.()
       if result
-        as_directed(:success, result, object)
+        as_directed(:success, result, object) || result
       else
-        as_directed(:failure, result, object)
+        as_directed(:failure, result, object) || result
       end
     rescue *exception_classes => exception
       run_exception_block(exception)
