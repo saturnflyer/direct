@@ -9,7 +9,7 @@ class Later
 end
 
 
-class ExecutableTest < Minitest::Test
+class StrictExecutableTest < Minitest::Test
   def perform(&block)
     Later.new.
       perform(block).
