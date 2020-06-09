@@ -1,3 +1,7 @@
+## Version 2.0.0
+
+A bug in deferred execution did not return the success/failure results. Fixes test names that cause a collision and incorrect test scenarios.
+
 ## Version 1.2.1
 
 Provide an 'object:' to a Direct.defer or Direct.strict_defer to be sent as the third parameter in the executed blocks.
