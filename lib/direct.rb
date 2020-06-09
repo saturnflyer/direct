@@ -85,7 +85,7 @@ module Direct
   #   puts "it failed!"
   # }.do_it
   #
-  # Your blocks will always receive the object itself as the first argument.
+  # Your blocks will *always* receive the object itself as the first argument.
   #
   def direct(key, callable=nil, &block)
     __directions.store(key, callable || block)
@@ -103,6 +103,8 @@ module Direct
   # end
   #
   # This will raise an error if the provided key is not found
+  #
+  # The current value for self will be sent as the first argument to the block
   def as_directed(key, *args)
     return if allow_missing_directions? && __directions.empty?
     __directions.fetch(key).map do |block|
