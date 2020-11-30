@@ -20,10 +20,12 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     rake (13.0.1)
-    simplecov (0.18.5)
+    simplecov (0.20.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
-    simplecov-html (0.12.2)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.12.3)
+    simplecov_json_formatter (0.1.2)
 
 PLATFORMS
   ruby
