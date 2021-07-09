@@ -19,7 +19,7 @@ GEM
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
-    rake (13.0.3)
+    rake (13.0.6)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
