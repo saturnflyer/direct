@@ -40,12 +40,14 @@ module Direct
     #      puts "The #{thing} did something!"
     #   }.execute
     #
-    def initialize(callable=nil, object: nil, &block)
+    def initialize(callable=nil, *args, object: nil, **kwargs, &block)
       @object = object
+      @args = args
+      @kwargs = kwargs
       @execution = callable || block
       @exception_classes = [StandardError]
     end
-    attr_reader :execution, :exception_classes, :object
+    attr_reader :execution, :exception_classes, :object, :args, :kwargs
 
     # Tell the object what to do for a success path
     #
@@ -90,9 +92,9 @@ module Direct
 
     def run_exception_block(exception)
       if __directions.key?(:exception)
-        as_directed(:exception, exception, object)
+        as_directed(:exception, exception, object, *args, *kwargs)
       else
-        as_directed(:failure, exception, object)
+        as_directed(:failure, exception, object, *args, *kwargs)
       end
     end
     private :run_exception_block
@@ -104,9 +106,9 @@ module Direct
     def value
       result = execution.()
       if result
-        as_directed(:success, result, object) || result
+        as_directed(:success, result, object, *args, *kwargs) || result
       else
-        as_directed(:failure, result, object) || result
+        as_directed(:failure, result, object, *args, *kwargs) || result
       end
     rescue *exception_classes => exception
       run_exception_block(exception)

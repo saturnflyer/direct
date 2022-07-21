@@ -68,7 +68,7 @@ module Direct
   #   end
   #   do_it.value
   #
-  def self.defer(callable=nil, object: nil, &block)
+  def self.defer(callable=nil, *args, object: nil, **kwargs, &block)
     Executable.new(callable, object: object, &block)
   end
 
@@ -105,10 +105,10 @@ module Direct
   # This will raise an error if the provided key is not found
   #
   # The current value for self will be sent as the first argument to the block
-  def as_directed(key, *args)
+  def as_directed(key, *args, **kwargs)
     return if allow_missing_directions? && __directions.empty?
     __directions.fetch(key).map do |block|
-      block.call(self, *args)
+      block.call(self, *args, **kwargs)
     end
   rescue KeyError
     return if allow_missing_directions?
