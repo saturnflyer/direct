@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    direct (2.0.0)
+    direct (2.0.1)
       concurrent-ruby (>= 1.0)
 
 GEM
