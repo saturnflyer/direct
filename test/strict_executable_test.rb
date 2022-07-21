@@ -8,7 +8,6 @@ class Later
   end
 end
 
-
 class StrictExecutableTest < Minitest::Test
   def perform(&block)
     Later.new.

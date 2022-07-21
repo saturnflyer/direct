@@ -1,3 +1,8 @@
+## Version 2.0.1
+
+Fix bug where strict_defer was not accepting callable and object arguments.
+Drop Ruby 2.5 and below
+
 ## Version 2.0.0
 
 A bug in deferred execution did not return the success/failure results. Fixes test names that cause a collision and incorrect test scenarios.
