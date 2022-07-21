@@ -59,4 +59,6 @@ module Direct
     end
     alias execute value
   end
+
+  private_constant :StrictExecutable
 end

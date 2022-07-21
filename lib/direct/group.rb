@@ -31,4 +31,6 @@ module Direct
       map.keys.inspect
     end
   end
+
+  private_constant :Group
 end

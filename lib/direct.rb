@@ -122,6 +122,6 @@ module Direct
   end
 
   def __directions
-    @__directions ||= Direct::Group.new
+    @__directions ||= Group.new
   end
 end
