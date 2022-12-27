@@ -13,12 +13,12 @@ GEM
     docile (1.4.0)
     method_source (1.0.0)
     minitest (5.16.3)
-    pry (0.13.1)
+    pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    pry-byebug (3.9.0)
+    pry-byebug (3.10.1)
       byebug (~> 11.0)
-      pry (~> 0.13.0)
+      pry (>= 0.13, < 0.15)
     rake (13.0.6)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -38,4 +38,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   2.3.17
+   2.4.1
