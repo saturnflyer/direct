@@ -1,8 +1,8 @@
-require 'concurrent'
+require "concurrent"
 module Direct
   class Group
     def initialize
-      @map = Concurrent::Map.new{|collection, key|
+      @map = Concurrent::Map.new { |collection, key|
         collection.put(key, Concurrent::Array.new)
       }
     end
@@ -10,7 +10,7 @@ module Direct
     attr_reader :map
     private :map
 
-    def store(key, callable=nil, &block)
+    def store(key, callable = nil, &block)
       map[key] << (callable || block)
       self
     end

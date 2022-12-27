@@ -48,7 +48,7 @@ module Direct
     # provided to the exception path.
     #
     def value
-      result = execution.()
+      result = execution.call
       if result
         as_directed(:success, result)
       else
@@ -57,7 +57,7 @@ module Direct
     rescue *exception_classes => exception
       run_exception_block(exception)
     end
-    alias execute value
+    alias_method :execute, :value
   end
 
   private_constant :StrictExecutable

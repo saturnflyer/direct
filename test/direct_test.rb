@@ -3,7 +3,7 @@ require "test_helper"
 class Something
   include Direct
 
-  def initialize(save:true)
+  def initialize(save: true)
     @save = save
   end
   attr_reader :save
@@ -34,19 +34,18 @@ class PassThrough
   end
 end
 
-
 class DirectTest < Minitest::Test
   def do_it(save: true)
-    Something.new(save: save).direct(:success){ |something|
+    Something.new(save: save).direct(:success) { |something|
       @result = "it worked! #{something}"
-    }.direct(:failure){ |something, errors|
+    }.direct(:failure) { |something, errors|
       @result = "it failed! #{errors}"
     }.save!
     @result
   end
 
   def test_that_it_runs_success_path
-    assert_match(/it worked\!.*Something/, do_it(save: true))
+    assert_match(/it worked!.*Something/, do_it(save: true))
   end
 
   def test_that_it_runs_failure_path
@@ -54,7 +53,7 @@ class DirectTest < Minitest::Test
   end
 
   def test_that_it_passes_the_object_to_the_path
-    object = Something.new.direct(:success){|passed_object|
+    object = Something.new.direct(:success) { |passed_object|
       passed_object
     }
     assert_equal [object], object.save!
@@ -62,27 +61,27 @@ class DirectTest < Minitest::Test
 
   def test_that_it_runs_multiple_blocks
     @results = []
-    Something.new.
-      direct(:failure){|_| @results << "nope" }.
-      direct(:success){|_| @results << "first" }.
-      direct(:success){|_| @results << "second" }.
-      save!
+    Something.new
+      .direct(:failure) { |_| @results << "nope" }
+      .direct(:success) { |_| @results << "first" }
+      .direct(:success) { |_| @results << "second" }
+      .save!
 
     assert_equal ["first", "second"], @results
   end
 
   def test_that_it_runs_multiple_alternate_blocks
     @results = []
-    Something.new(save: false).
-      direct(:success){|_| @results << "nope" }.
-      direct(:failure){|_| @results << "first" }.
-      direct(:failure){|_| @results << "second" }.
-      save!
+    Something.new(save: false)
+      .direct(:success) { |_| @results << "nope" }
+      .direct(:failure) { |_| @results << "first" }
+      .direct(:failure) { |_| @results << "second" }
+      .save!
 
     assert_equal ["first", "second"], @results
   end
 
-  def  test_that_it_raises_error_for_unknown_direction
+  def test_that_it_raises_error_for_unknown_direction
     err = assert_raises(Direct::MissingProcedure) do
       Something.new.unknown
     end
@@ -94,7 +93,7 @@ class DirectTest < Minitest::Test
   end
 
   def test_that_it_executes_provided_directions
-    object = PassThrough.new.direct(:other){ "it worked!" }
+    object = PassThrough.new.direct(:other) { "it worked!" }
     assert_equal ["it worked!"], object.other
   end
 end

@@ -52,8 +52,8 @@ module Direct
   #     failure{|result| puts "it failed!" }.
   #     value
   #
-  def self.strict_defer(callable=nil, object: nil, &block)
-    StrictExecutable.new(callable=nil, object: object, &block)
+  def self.strict_defer(callable = nil, object: nil, &block)
+    StrictExecutable.new(callable = nil, object: object, &block)
   end
 
   # Wrap a block of code to return an object for handling
@@ -68,7 +68,7 @@ module Direct
   #   end
   #   do_it.value
   #
-  def self.defer(callable=nil, *args, object: nil, **kwargs, &block)
+  def self.defer(callable = nil, *args, object: nil, **kwargs, &block)
     Executable.new(callable, object: object, &block)
   end
 
@@ -87,7 +87,7 @@ module Direct
   #
   # Your blocks will *always* receive the object itself as the first argument.
   #
-  def direct(key, callable=nil, &block)
+  def direct(key, callable = nil, &block)
     __directions.store(key, callable || block)
     self
   end

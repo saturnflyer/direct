@@ -40,7 +40,7 @@ module Direct
     #      puts "The #{thing} did something!"
     #   }.execute
     #
-    def initialize(callable=nil, *args, object: nil, **kwargs, &block)
+    def initialize(callable = nil, *args, object: nil, **kwargs, &block)
       @object = object
       @args = args
       @kwargs = kwargs
@@ -53,7 +53,7 @@ module Direct
     #
     # Returns itself
     #
-    def success(callable=nil, &block)
+    def success(callable = nil, &block)
       direct(:success, (callable || block))
       self
     end
@@ -62,7 +62,7 @@ module Direct
     #
     # Returns itself
     #
-    def failure(callable=nil, &block)
+    def failure(callable = nil, &block)
       direct(:failure, (callable || block))
       self
     end
@@ -104,7 +104,7 @@ module Direct
     # provided to the exception path.
     #
     def value
-      result = execution.()
+      result = execution.call
       if result
         as_directed(:success, result, object, *args, *kwargs) || result
       else
@@ -113,7 +113,7 @@ module Direct
     rescue *exception_classes => exception
       run_exception_block(exception)
     end
-    alias execute value
+    alias_method :execute, :value
   end
 
   private_constant :Executable
