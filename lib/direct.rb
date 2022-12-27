@@ -53,7 +53,7 @@ module Direct
   #     value
   #
   def self.strict_defer(callable = nil, object: nil, &block)
-    StrictExecutable.new(callable = nil, object: object, &block)
+    StrictExecutable.new(callable, object: object, &block)
   end
 
   # Wrap a block of code to return an object for handling
