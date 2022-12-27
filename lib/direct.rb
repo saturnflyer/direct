@@ -105,10 +105,10 @@ module Direct
   # This will raise an error if the provided key is not found
   #
   # The current value for self will be sent as the first argument to the block
-  def as_directed(key, *args, **kwargs)
+  def as_directed(key, ...)
     return if allow_missing_directions? && __directions.empty?
     __directions.fetch(key).map do |block|
-      block.call(self, *args, **kwargs)
+      block.call(self, ...)
     end
   rescue KeyError
     return if allow_missing_directions?

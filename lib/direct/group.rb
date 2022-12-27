@@ -3,7 +3,7 @@ module Direct
   class Group
     def initialize
       @map = Concurrent::Map.new { |collection, key|
-        collection.put(key, Concurrent::Array.new)
+        collection.put(key, Concurrent::Set.new)
       }
     end
 

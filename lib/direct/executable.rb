@@ -1,3 +1,5 @@
+require "direct/exception_handler"
+
 module Direct
   class Executable
     include Direct.allow_missing_directions
@@ -44,10 +46,10 @@ module Direct
       @object = object
       @args = args
       @kwargs = kwargs
+      @exception_handler = ExceptionHandler.new
       @execution = callable || block
-      @exception_classes = [StandardError]
     end
-    attr_reader :execution, :exception_classes, :object, :args, :kwargs
+    attr_reader :execution, :exception_handler, :object, :args, :kwargs
 
     # Tell the object what to do for a success path
     #
@@ -83,11 +85,15 @@ module Direct
     #   }
     #
     def exception(*classes, &block)
-      unless classes.empty?
-        @exception_classes = classes
-      end
-      direct(:exception, block)
+      classes = [StandardError] if classes.empty?
+      exception_handler.monitor(classes, &block)
+
+      direct(:exception, exception_handler)
       self
+    end
+
+    def exception_classes
+      exception_handler.classes
     end
 
     def run_exception_block(exception)
