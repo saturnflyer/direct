@@ -18,8 +18,14 @@ jobs:
     name: Ruby ${{ matrix.ruby }} sample
     steps:
       - uses: actions/checkout@v3
+      - uses: amancevice/setup-code-climate@v1
+        with:
+          cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
+      - run: cc-test-reporter before-build
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - run: bundle exec rake
+        run: bundle exec rake
+      - run: cc-test-reporter after-build
+        if: ${{ github.event_name != 'pull_request' }}
