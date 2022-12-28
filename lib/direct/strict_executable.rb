@@ -43,21 +43,18 @@ module Direct
     #   }.execute
     #
 
-    # Return the value of the success or failure path
-    # and rescue from StandardError or from the modules
-    # provided to the exception path.
+    # Override the behavior of the parent class to *not* fall back to the
+    # result.
     #
-    def value
+    def trigger_directions
       result = execution.call
       if result
         as_directed(:success, result, object, *args, **kwargs)
       else
         as_directed(:failure, result, object, *args, **kwargs)
       end
-    rescue *exception_classes => exception
-      run_exception_block(exception)
     end
-    alias_method :execute, :value
+    private :trigger_directions
   end
 
   private_constant :StrictExecutable

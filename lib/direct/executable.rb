@@ -110,16 +110,22 @@ module Direct
     # provided to the exception path.
     #
     def value
+      trigger_directions
+    rescue *exception_classes => exception
+      run_exception_block(exception)
+    end
+    alias_method :execute, :value
+
+    def trigger_directions
       result = execution.call
       if result
         as_directed(:success, result, object, *args, **kwargs)
       else
         as_directed(:failure, result, object, *args, **kwargs)
       end || result
-    rescue *exception_classes => exception
-      run_exception_block(exception)
     end
-    alias_method :execute, :value
+    private :trigger_directions
+
   end
 
   private_constant :Executable
