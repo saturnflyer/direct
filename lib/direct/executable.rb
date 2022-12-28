@@ -98,9 +98,9 @@ module Direct
 
     def run_exception_block(exception)
       if __directions.key?(:exception)
-        as_directed(:exception, exception, object, *args, *kwargs)
+        as_directed(:exception, exception, object, *args, **kwargs)
       else
-        as_directed(:failure, exception, object, *args, *kwargs)
+        as_directed(:failure, exception, object, *args, **kwargs)
       end
     end
     private :run_exception_block
@@ -112,9 +112,9 @@ module Direct
     def value
       result = execution.call
       if result
-        as_directed(:success, result, object, *args, *kwargs)
+        as_directed(:success, result, object, *args, **kwargs)
       else
-        as_directed(:failure, result, object, *args, *kwargs)
+        as_directed(:failure, result, object, *args, **kwargs)
       end || result
     rescue *exception_classes => exception
       run_exception_block(exception)
