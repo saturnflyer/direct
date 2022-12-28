@@ -6,6 +6,10 @@ class Later
       callable.call
     }
   end
+
+  def do_more(callable)
+    Direct.strict_defer(callable, "one", "two", this: "this", that: "that")
+  end
 end
 
 class StrictExecutableTest < Minitest::Test
@@ -51,5 +55,13 @@ class StrictExecutableTest < Minitest::Test
       .exception { |obj, exception| exception.message }
 
     assert_equal(["oopsie!"], deferred.value)
+  end
+
+  def test_that_it_passes_additional_args
+    deferred = Later.new
+      .do_more(-> { true })
+      .success { |deferred, result, object, *args, **kwargs| {args: args, kwargs: kwargs} }
+
+    assert_equal([{:args=>["one", "two"], :kwargs=>{:this=>"this", :that=>"that"}}], deferred.value)
   end
 end
