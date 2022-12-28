@@ -112,10 +112,10 @@ module Direct
     def value
       result = execution.call
       if result
-        as_directed(:success, result, object, *args, *kwargs) || result
+        as_directed(:success, result, object, *args, *kwargs)
       else
-        as_directed(:failure, result, object, *args, *kwargs) || result
-      end
+        as_directed(:failure, result, object, *args, *kwargs)
+      end || result
     rescue *exception_classes => exception
       run_exception_block(exception)
     end
