@@ -1,5 +1,6 @@
 ## Version 2.0.1
 
+Introduce an ExceptionHandler to allow for multiple exception blocks
 Drop Ruby 2.6 support
 Fix bug where strict_defer was not accepting callable and object arguments.
 Drop Ruby 2.5 and below
