@@ -34,7 +34,7 @@ SomeClass.new.procedure.success{ |deferred_object, result, object|
   puts "it worked!"
 }.failure { |deferred_object, result, object|
   puts "it failed :-("
-}.exception{ |deferred_object, exception, object|
+}.exception { |deferred_object, exception, object|
   puts "Oh no! An exception was raised!"
 }.execute
 ```
@@ -48,6 +48,16 @@ SomeClass.new.procedure.success{ |deferred_object, result, object|
   puts "it failed :-("
 }.exception(SomeLibrary::SomeSpecialError){ |deferred_object, exception, object|
   puts "Oh no! An exception was raised!"
+}.execute
+```
+
+You can also handle different exceptions with different blocks:
+
+```ruby
+SomeClass.new.procedure.exception(SomeLibrary::SomeSpecialError){ |deferred_object, exception, object|
+  puts "Oh no! A Special Error!"
+}.exception(ArgumentError){ |deferred_object, exception, object|
+  puts "Oops! The arguments are wrong!"
 }.execute
 ```
 
