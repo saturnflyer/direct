@@ -42,8 +42,8 @@ module Direct
     #      puts "The #{thing} did something!"
     #   }.execute
     #
-    def initialize(callable = nil, *args, object: nil, **kwargs, &block)
-      @object = object
+    def initialize(callable = nil, *args, **kwargs, &block)
+      @object = kwargs.delete(:object)
       @args = args
       @kwargs = kwargs
       @exception_handler = kwargs.delete(:exception_handler) || ExceptionHandler.new
