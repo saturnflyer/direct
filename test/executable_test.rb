@@ -60,7 +60,7 @@ class ExecutableTest < Minitest::Test
       .do_more(-> { true })
       .success { |deferred, result, object, *args, **kwargs| {args: args, kwargs: kwargs} }
 
-    assert_equal([{:args=>["some", "args"], :kwargs=>{:and=>"more"}}], deferred.value)
+    assert_equal([{args: ["some", "args"], kwargs: {and: "more"}}], deferred.value)
   end
 end
 

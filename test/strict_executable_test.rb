@@ -62,6 +62,6 @@ class StrictExecutableTest < Minitest::Test
       .do_more(-> { true })
       .success { |deferred, result, object, *args, **kwargs| {args: args, kwargs: kwargs} }
 
-    assert_equal([{:args=>["one", "two"], :kwargs=>{:this=>"this", :that=>"that"}}], deferred.value)
+    assert_equal([{args: ["one", "two"], kwargs: {this: "this", that: "that"}}], deferred.value)
   end
 end
