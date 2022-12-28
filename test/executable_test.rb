@@ -6,6 +6,10 @@ class NotNow
       callable.call
     }
   end
+
+  def do_more(callable)
+    Direct.defer(callable, "some", "args", and: "more")
+  end
 end
 
 class ExecutableTest < Minitest::Test
@@ -49,6 +53,14 @@ class ExecutableTest < Minitest::Test
       .exception { |obj, exception| exception.message }
 
     assert_equal(["oopsie!"], deferred.value)
+  end
+
+  def test_that_it_passes_additional_args
+    deferred = NotNow.new
+      .do_more(-> { true })
+      .success { |deferred, result, object, *args, **kwargs| {args: args, kwargs: kwargs} }
+
+    assert_equal([{:args=>["some", "args"], :kwargs=>{:and=>"more"}}], deferred.value)
   end
 end
 
