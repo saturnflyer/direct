@@ -52,8 +52,8 @@ module Direct
   #     failure{|result| puts "it failed!" }.
   #     value
   #
-  def self.strict_defer(callable = nil, object: nil, &block)
-    StrictExecutable.new(callable, object: object, &block)
+  def self.strict_defer(callable = nil, *args, object: nil, **kwargs, &block)
+    StrictExecutable.new(callable, *args, object: object, **kwargs, &block)
   end
 
   # Wrap a block of code to return an object for handling
@@ -69,7 +69,7 @@ module Direct
   #   do_it.value
   #
   def self.defer(callable = nil, *args, object: nil, **kwargs, &block)
-    Executable.new(callable, object: object, &block)
+    Executable.new(callable, *args, object: object, **kwargs, &block)
   end
 
   # Tell the object what to do in a given scenario.
