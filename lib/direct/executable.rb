@@ -46,7 +46,7 @@ module Direct
       @object = object
       @args = args
       @kwargs = kwargs
-      @exception_handler = ExceptionHandler.new
+      @exception_handler = kwargs.delete(:exception_handler) || ExceptionHandler.new
       @execution = callable || block
     end
     attr_reader :execution, :exception_handler, :object, :args, :kwargs
