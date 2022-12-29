@@ -84,6 +84,34 @@ DeferrableClass.new.direct(:success){|instance, *data|
 
 Your blocks will always receive the object itself as the first argument.
 
+If you want to have a better API, just make it your own:
+
+```ruby
+class DeferrableClass
+  def when_it_works(&)
+    direct(:success, &)
+  end
+
+  def when_it_fails(&)
+    direct(:oopsies, &)
+  end
+
+  def do_it
+    if it_worked?
+      as_directed(:success)
+    else
+      as_directed(:oopsies)
+    end
+  end
+end
+
+DeferrableClass.new.when_it_works do |instance|
+  # successful path
+end.when_it_fails do |instance|
+  # failure path
+end
+```
+
 ## Why?
 
 You could easily write code that says `if` this `else` that.
