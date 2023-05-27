@@ -1,3 +1,6 @@
+## Version 2.1.0
+
+Check for inheritance on exception handler exceptions.
 ## Version 2.0.1
 
 Introduce an ExceptionHandler to allow for multiple exception blocks

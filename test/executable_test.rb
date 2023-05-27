@@ -55,6 +55,14 @@ class ExecutableTest < Minitest::Test
     assert_equal(["oopsie!"], deferred.value)
   end
 
+  def test_that_it_checks_for_exception_inheritance
+    deferred = NotNow.new
+      .perform(-> { raise NoMethodError, "That method doesn't exist" })
+      .exception(StandardError) { |obj, exception| exception.message }
+
+    assert_equal(["That method doesn't exist"], deferred.value)
+  end
+
   def test_that_it_passes_additional_args
     deferred = NotNow.new
       .do_more(-> { true })

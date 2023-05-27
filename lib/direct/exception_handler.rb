@@ -23,7 +23,12 @@ module Direct
     # deferred object.
     def call(deferred, exception, object)
       if_none = proc { raise "No handler for this exception: #{exception.class}!" }
-      result = @handlers.find(if_none) { |key, val| key.include?(exception.class) }
+      result = @handlers.find { |key, val| key.include?(exception.class) }
+      if result.nil?
+        result = @handlers.find(if_none) do |key, val|
+          key.find { |klass| exception.class < klass }
+        end
+      end
 
       result.last.call(deferred, exception, object)
     end
