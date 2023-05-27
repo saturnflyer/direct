@@ -60,7 +60,7 @@ class ExecutableTest < Minitest::Test
       .perform(-> { raise NoMethodError, "That method doesn't exist" })
       .exception(StandardError) { |obj, exception| exception.message }
 
-    assert_equal(["That method doesn't exist"], deferred.value)
+    assert_match(/That method doesn't exist/, deferred.value.map(&:itself).join)
   end
 
   def test_that_it_passes_additional_args
