@@ -42,14 +42,18 @@ module Direct
     #      puts "The #{thing} did something!"
     #   }.execute
     #
-    def initialize(callable = nil, *args, **kwargs, &block)
-      @object = kwargs.delete(:object)
+    def initialize(callable = nil, *args, object: nil, exception_handler: nil, **kwargs, &block)
+      @object = object
       @args = args
       @kwargs = kwargs
-      @exception_handler = kwargs.delete(:exception_handler) || ExceptionHandler.new
+      @exception_handler = exception_handler
       @execution = callable || block
     end
-    attr_reader :execution, :exception_handler, :object, :args, :kwargs
+    attr_reader :execution, :object, :args, :kwargs
+
+    def exception_handler
+      @exception_handler ||= ExceptionHandler.new
+    end
 
     # Tell the object what to do for a success path
     #

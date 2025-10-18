@@ -3,18 +3,23 @@ module Direct
   class ExceptionHandler
     def initialize
       @handlers = {}
+      @classes_cache = nil
     end
 
     # All classes, including StandardError, for which this object
     # maintains a block to execute.
     def classes
-      [StandardError, @handlers.keys.flatten].flatten
+      @classes_cache ||= begin
+        return [StandardError] if @handlers.empty?
+        [StandardError, *@handlers.keys.flatten].uniq
+      end
     end
 
     # Pass a single or multiple exception classes and the block
     # to be used to handle them.
     def monitor(*classes, &block)
       @handlers[classes.flatten] = block
+      @classes_cache = nil
     end
 
     # This will find the first handler given to `monitor` which matches
@@ -22,15 +27,22 @@ module Direct
     # deferred object, the exception object, and any given object to the
     # deferred object.
     def call(deferred, exception, object)
-      if_none = proc { raise "No handler for this exception: #{exception.class}!" }
-      result = @handlers.find { |key, val| key.include?(exception.class) }
-      if result.nil?
-        result = @handlers.find(if_none) do |key, val|
-          key.find { |klass| exception.class < klass }
-        end
+      exception_class = exception.class
+
+      # Fast path: exact class match
+      result = @handlers.find { |keys, _| keys.include?(exception_class) }
+      return result.last.call(deferred, exception, object) if result
+
+      # Slow path: inheritance check
+      result = @handlers.find do |keys, _|
+        keys.any? { |klass| exception_class < klass }
       end
 
-      result.last.call(deferred, exception, object)
+      if result
+        result.last.call(deferred, exception, object)
+      else
+        raise "No handler for this exception: #{exception_class}!"
+      end
     end
   end
 end

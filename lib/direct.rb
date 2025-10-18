@@ -108,10 +108,12 @@ module Direct
   # The current value for self will be sent as the first argument to the block
   def as_directed(key, ...)
     return if allow_missing_directions? && __directions.empty?
-    __directions.fetch(key).map do |block|
-      block.call(self, ...)
+
+    # Fast path: check if key exists before rescue handling
+    if __directions.key?(key)
+      return __directions.fetch(key).map { |block| block.call(self, ...) }
     end
-  rescue KeyError
+
     return if allow_missing_directions?
     raise MissingProcedure, "Procedure for :#{key} was reached but not specified."
   end
