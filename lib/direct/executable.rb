@@ -56,7 +56,7 @@ module Direct
     # Returns itself
     #
     def success(callable = nil, &block)
-      direct(:success, (callable || block))
+      direct(:success, callable || block)
       self
     end
 
@@ -65,7 +65,7 @@ module Direct
     # Returns itself
     #
     def failure(callable = nil, &block)
-      direct(:failure, (callable || block))
+      direct(:failure, callable || block)
       self
     end
 
@@ -125,7 +125,6 @@ module Direct
       end || result
     end
     private :trigger_directions
-
   end
 
   private_constant :Executable

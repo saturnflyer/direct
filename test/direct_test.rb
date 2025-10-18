@@ -23,6 +23,7 @@ end
 
 class PassThrough
   include Direct.allow_missing_directions
+
   def save
     as_directed(:success)
     "it worked!"

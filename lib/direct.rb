@@ -6,6 +6,7 @@ module Direct
 
   module AllowMissing
     include Direct
+
     def allow_missing_directions?
       true
     end
