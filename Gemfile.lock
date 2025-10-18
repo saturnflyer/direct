@@ -45,6 +45,8 @@ GEM
       psych (>= 4.0.0)
       tsort
     regexp_parser (2.11.3)
+    reissue (0.4.4)
+      rake
     reline (0.6.2)
       io-console (~> 0.5)
     rubocop (1.80.2)
@@ -100,6 +102,7 @@ DEPENDENCIES
   mutex_m
   ostruct
   rake
+  reissue
   simplecov
   standard
 
